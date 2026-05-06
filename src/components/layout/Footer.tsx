@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Instagram, Facebook, Tv2, Mail, Phone, MapPin } from 'lucide-react';
+import { Camera, Globe, Tv2, Mail, Phone, MapPin } from 'lucide-react';
 
 const footerLinks = {
   tienda: [
@@ -83,8 +83,8 @@ export default function Footer() {
             {/* Social */}
             <div style={{ display: 'flex', gap: '10px' }}>
               {[
-                { icon: <Instagram size={18} />, href: 'https://instagram.com/whiskyboom', label: 'Instagram' },
-                { icon: <Facebook size={18} />, href: 'https://facebook.com/whiskyboom', label: 'Facebook' },
+                { icon: <Camera size={18} />, href: 'https://instagram.com/whiskyboom', label: 'Instagram' },
+                { icon: <Globe size={18} />, href: 'https://facebook.com/whiskyboom', label: 'Facebook' },
                 { icon: <Tv2 size={18} />, href: 'https://youtube.com/whiskyboom', label: 'YouTube' },
               ].map(social => (
                 <a
