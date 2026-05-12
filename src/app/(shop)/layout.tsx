@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import AnnouncementBar from "@/components/layout/AnnouncementBar";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import CartDrawer from "@/components/cart/CartDrawer";
+import { CartProvider } from "@/lib/cart-context";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,11 +33,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={inter.variable}>
-        <AnnouncementBar />
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+      <body className={inter.variable} suppressHydrationWarning>
+        <CartProvider>
+          <AnnouncementBar />
+          <Navbar />
+          <CartDrawer />
+          <main>{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

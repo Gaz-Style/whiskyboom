@@ -11,9 +11,9 @@ export default function Home() {
       <HeroBanner />
       <TrustBadges />
       <PromoBanners />
-      <ProductGrid title="Ofertas Destacadas" />
+      <ProductGrid title="Productos Destacados" variant="featured" />
       <CategoryCards />
-      <ProductGrid title="Nuevas Llegadas" />
+      <ProductGrid title="Nuevas Llegadas" variant="new" />
       <Newsletter />
     </>
   );
