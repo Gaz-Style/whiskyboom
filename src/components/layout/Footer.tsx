@@ -196,6 +196,7 @@ export default function Footer() {
           <div style={{ display: 'flex', gap: '16px' }}>
             <Link href="/privacidad" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none', fontSize: '12px' }}>Privacidad</Link>
             <Link href="/terminos" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none', fontSize: '12px' }}>Términos</Link>
+            <Link href="/admin" style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none', fontSize: '12px' }}>Admin</Link>
           </div>
         </div>
       </div>
