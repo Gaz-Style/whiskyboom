@@ -29,8 +29,8 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             </span>
           )}
           {!product.in_stock && (
-            <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
-              <span style={{ background: '#1E2530', color: 'white', fontSize: '12px', fontWeight: '700', padding: '6px 14px', borderRadius: '2px', textTransform: 'uppercase', letterSpacing: '1px' }}>Sin Stock</span>
+            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2 }}>
+              <span style={{ background: 'var(--gold)', color: '#1a1a1a', fontSize: '12px', fontWeight: '800', padding: '6px 14px', borderRadius: '2px', textTransform: 'uppercase', letterSpacing: '1px' }}>Agotado</span>
             </div>
           )}
           {/* Product image or placeholder */}
@@ -58,7 +58,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
             {product.original_price && (
               <span className="product-card__price-old">{formatPrice(product.original_price)}</span>
             )}
-            <span className="product-card__price" style={{ color: product.original_price ? '#8B1A1A' : '#1A1A1A' }}>
+            <span className="product-card__price" style={{ color: product.original_price ? 'var(--gold)' : 'var(--text-primary)' }}>
               {formatPrice(product.price)}
             </span>
           </div>
@@ -88,12 +88,12 @@ export default async function ProductGrid({ title = 'Destacados', showAll = true
   const products = variant === 'new' ? await getNewArrivals(8) : await getFeaturedProducts(8)
 
   return (
-    <section style={{ padding: '60px 0', background: 'white' }}>
+    <section style={{ padding: '60px 0', background: 'transparent' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
           <h2 className="section-title">{title}</h2>
           {showAll && (
-            <Link href="/productos" style={{ fontSize: '13px', fontWeight: '600', color: '#8B1A1A', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            <Link href="/productos" style={{ fontSize: '13px', fontWeight: '600', color: 'var(--gold)', textDecoration: 'none', textTransform: 'uppercase', letterSpacing: '1px' }}>
               Ver todo el catálogo →
             </Link>
           )}

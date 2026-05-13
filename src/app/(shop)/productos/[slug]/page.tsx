@@ -107,7 +107,7 @@ export default function ProductDetailPage() {
   const discount = product.original_price ? Math.round((1 - product.price / product.original_price) * 100) : 0
 
   return (
-    <div style={{ fontFamily: 'var(--font-inter, system-ui)', background: 'white', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'var(--font-inter, system-ui)', background: 'transparent', minHeight: '100vh' }}>
       {/* Breadcrumb */}
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '16px 24px' }}>
         <nav style={{ fontSize: '12px', color: '#9CA3AF', display: 'flex', gap: '6px', alignItems: 'center' }}>
@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
 
         {/* LEFT — Gallery */}
         <div>
-          <div style={{ background: '#F9F7F3', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '500px', position: 'relative', overflow: 'hidden', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--card-bg)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '500px', position: 'relative', overflow: 'hidden', marginBottom: '12px' }}>
             {allImages.length > 0 ? (
               <img src={allImages[activeImg]} alt={product.name} style={{ maxHeight: '440px', maxWidth: '85%', objectFit: 'contain' }} />
             ) : (
@@ -142,7 +142,7 @@ export default function ProductDetailPage() {
           {allImages.length > 1 && (
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {allImages.map((img, i) => (
-                <button key={i} onClick={() => setActiveImg(i)} style={{ width: '70px', height: '70px', padding: 0, border: `2px solid ${activeImg === i ? '#C9A85C' : '#E5E7EB'}`, borderRadius: '6px', overflow: 'hidden', cursor: 'pointer', background: '#F9F7F3', transition: 'border-color 0.2s' }}>
+                <button key={i} onClick={() => setActiveImg(i)} style={{ width: '70px', height: '70px', padding: 0, border: `2px solid ${activeImg === i ? '#C9A85C' : 'var(--gray-200)'}`, borderRadius: '6px', overflow: 'hidden', cursor: 'pointer', background: 'var(--card-bg)', transition: 'border-color 0.2s' }}>
                   <img src={img} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                 </button>
               ))}
@@ -152,13 +152,13 @@ export default function ProductDetailPage() {
 
         {/* RIGHT — Info */}
         <div style={{ position: 'sticky', top: '24px' }}>
-          <p style={{ margin: '0 0 4px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', color: '#9CA3AF' }}>{product.brand}</p>
-          <h1 style={{ margin: '0 0 12px', fontSize: '28px', fontWeight: '900', color: '#1a1a1a', lineHeight: 1.2 }}>{product.name}</h1>
+          <p style={{ margin: '0 0 4px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--text-muted)' }}>{product.brand}</p>
+          <h1 style={{ margin: '0 0 12px', fontSize: '28px', fontWeight: '900', color: 'var(--text-primary)', lineHeight: 1.2 }}>{product.name}</h1>
 
           {/* Rating */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
             <StarRating rating={product.rating} />
-            <span style={{ fontSize: '13px', color: '#6B7280' }}>
+            <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
               {product.rating.toFixed(1)} ({product.reviews} reseñas)
             </span>
           </div>
@@ -178,9 +178,9 @@ export default function ProductDetailPage() {
           {/* Price */}
           <div style={{ marginBottom: '20px' }}>
             {product.original_price && (
-              <span style={{ fontSize: '16px', color: '#9CA3AF', textDecoration: 'line-through', marginRight: '10px' }}>{formatPrice(product.original_price)}</span>
+              <span style={{ fontSize: '16px', color: 'var(--text-muted)', textDecoration: 'line-through', marginRight: '10px' }}>{formatPrice(product.original_price)}</span>
             )}
-            <span style={{ fontSize: '30px', fontWeight: '900', color: product.original_price ? '#8B1A1A' : '#1a1a1a' }}>
+            <span style={{ fontSize: '30px', fontWeight: '900', color: product.original_price ? '#8B1A1A' : 'var(--text-primary)' }}>
               {formatPrice(product.price)}
             </span>
           </div>
@@ -227,13 +227,13 @@ export default function ProductDetailPage() {
           </div>
 
           {/* Shipping calculator */}
-          <div style={{ background: '#F9F7F3', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
+          <div style={{ background: 'var(--card-bg)', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
             <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <Truck size={14} color="#C9A85C" /> Ver costo y tiempo de envío
             </p>
             <select
               value={province} onChange={e => setProvince(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '6px', fontSize: '13px', background: 'white', outline: 'none', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--gray-200)', borderRadius: '6px', fontSize: '13px', background: 'var(--bg-main)', color: 'var(--text-primary)', outline: 'none', cursor: 'pointer' }}
             >
               <option value="">Seleccioná tu provincia</option>
               {[...new Set(shipping.map(z => z.province))].sort().map(p => (
@@ -241,13 +241,13 @@ export default function ProductDetailPage() {
               ))}
             </select>
             {selectedZone && (
-              <div style={{ marginTop: '10px', padding: '10px 12px', background: 'white', borderRadius: '6px', border: '1px solid #E5E7EB', fontSize: '13px' }}>
+              <div style={{ marginTop: '10px', padding: '10px 12px', background: 'var(--bg-main)', borderRadius: '6px', border: '1px solid var(--gray-200)', fontSize: '13px' }}>
                 {isFreeShipping ? (
                   <p style={{ margin: 0, color: '#10B981', fontWeight: '700' }}>✓ ¡Envío GRATIS! Llega en {selectedZone.days_min}–{selectedZone.days_max} días hábiles</p>
                 ) : (
                   <div>
-                    <p style={{ margin: '0 0 4px', fontWeight: '700', color: '#1a1a1a' }}>{formatPrice(selectedZone.cost)} — {selectedZone.days_min}–{selectedZone.days_max} días hábiles</p>
-                    {selectedZone.is_free_above && <p style={{ margin: 0, color: '#9CA3AF', fontSize: '12px' }}>Envío gratis desde {formatPrice(selectedZone.is_free_above)}</p>}
+                    <p style={{ margin: '0 0 4px', fontWeight: '700', color: 'var(--text-primary)' }}>{formatPrice(selectedZone.cost)} — {selectedZone.days_min}–{selectedZone.days_max} días hábiles</p>
+                    {selectedZone.is_free_above && <p style={{ margin: 0, color: 'var(--text-muted)', fontSize: '12px' }}>Envío gratis desde {formatPrice(selectedZone.is_free_above)}</p>}
                   </div>
                 )}
               </div>
@@ -266,9 +266,9 @@ export default function ProductDetailPage() {
                   ['Volumen', `${product.volume} ml`],
                   product.distillery ? ['Destilería', product.distillery] : null,
                 ].filter(Boolean).map(row => (
-                  <tr key={row![0]} style={{ borderBottom: '1px solid #F0F0F0' }}>
-                    <td style={{ padding: '8px 0', color: '#9CA3AF', fontWeight: '600', width: '40%' }}>{row![0]}</td>
-                    <td style={{ padding: '8px 0', color: '#1a1a1a', fontWeight: '600' }}>{row![1]}</td>
+                  <tr key={row![0]} style={{ borderBottom: '1px solid var(--gray-200)' }}>
+                    <td style={{ padding: '8px 0', color: 'var(--text-muted)', fontWeight: '600', width: '40%' }}>{row![0]}</td>
+                    <td style={{ padding: '8px 0', color: 'var(--text-primary)', fontWeight: '600' }}>{row![1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -283,25 +283,25 @@ export default function ProductDetailPage() {
       </div>
 
       {/* Reviews section */}
-      <div style={{ background: '#F9F7F3', padding: '60px 24px' }}>
+      <div style={{ background: 'var(--card-bg)', padding: '60px 24px', borderTop: '1px solid var(--gray-200)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <h2 style={{ margin: '0 0 32px', fontSize: '24px', fontWeight: '900', color: '#1a1a1a' }}>
+          <h2 style={{ margin: '0 0 32px', fontSize: '24px', fontWeight: '900', color: 'var(--text-primary)' }}>
             Reseñas de Clientes {reviews.length > 0 && `(${reviews.length})`}
           </h2>
           {reviews.length === 0 ? (
-            <p style={{ color: '#9CA3AF', fontSize: '14px' }}>Todavía no hay reseñas para este producto. ¡Sé el primero!</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Todavía no hay reseñas para este producto. ¡Sé el primero!</p>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
               {reviews.map(review => (
-                <div key={review.id} style={{ background: 'white', borderRadius: '10px', padding: '20px', border: '1px solid #F0F0F0' }}>
+                <div key={review.id} style={{ background: 'var(--bg-main)', borderRadius: '10px', padding: '20px', border: '1px solid var(--gray-200)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                     <StarRating rating={review.rating} size={13} />
                     {review.verified_purchase && (
                       <span style={{ fontSize: '10px', color: '#10B981', fontWeight: '700', background: 'rgba(16,185,129,0.1)', padding: '2px 8px', borderRadius: '4px' }}>✓ Compra verificada</span>
                     )}
                   </div>
-                  {review.title && <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: '#1a1a1a' }}>{review.title}</p>}
-                  {review.comment && <p style={{ margin: '0 0 10px', fontSize: '13px', color: '#555', lineHeight: 1.6 }}>{review.comment}</p>}
+                  {review.title && <p style={{ margin: '0 0 4px', fontWeight: '700', fontSize: '14px', color: 'var(--text-primary)' }}>{review.title}</p>}
+                  {review.comment && <p style={{ margin: '0 0 10px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>{review.comment}</p>}
                   {review.photo_url && <img src={review.photo_url} alt="Foto del cliente" style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '6px', marginBottom: '10px' }} />}
                   <p style={{ margin: 0, fontSize: '12px', color: '#9CA3AF' }}>
                     — {review.customer_name} · {new Date(review.created_at).toLocaleDateString('es-AR', { year: 'numeric', month: 'long' })}

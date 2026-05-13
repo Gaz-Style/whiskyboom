@@ -55,7 +55,7 @@ export default function AdminSidebar() {
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
-      background: '#0F1117',
+      background: '#1E2530',
       borderRight: '1px solid rgba(255,255,255,0.07)',
     }}>
       {/* Logo */}
@@ -69,11 +69,25 @@ export default function AdminSidebar() {
       }}>
         {!collapsed && (
           <div>
-            <div style={{ color: 'white', fontSize: '16px', fontWeight: '800', letterSpacing: '2px', textTransform: 'uppercase' }}>
-              WHISKY<span style={{ color: '#C9A85C' }}>BOOM</span>
-            </div>
-            <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '10px', letterSpacing: '2px', textTransform: 'uppercase' }}>
-              Admin Panel
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                <span style={{ color: 'var(--gold)', fontSize: '16px', fontWeight: '500', letterSpacing: '0.5px' }}>WHISKY</span>
+                <span style={{ 
+                  color: 'white', 
+                  fontSize: '16px', 
+                  fontWeight: '500', 
+                  letterSpacing: '0.5px',
+                  border: '1px solid var(--maroon)',
+                  padding: '0 4px'
+                }}>BOOM</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '4px' }}>
+                <div style={{ height: '1px', width: '15px', background: 'var(--gold)' }}></div>
+                <span style={{ color: 'var(--gold)', fontSize: '8px', letterSpacing: '1px', fontWeight: '500' }}>
+                  BS.AS
+                </span>
+                <div style={{ height: '1px', width: '15px', background: 'var(--gold)' }}></div>
+              </div>
             </div>
           </div>
         )}

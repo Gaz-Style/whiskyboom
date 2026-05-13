@@ -37,13 +37,13 @@ const categories = [
 
 export default function CategoryCards() {
   return (
-    <section style={{ padding: '60px 0', background: '#F7F7F7' }}>
+    <section style={{ padding: '60px 0', background: 'transparent' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <h2 className="section-title centered" style={{ textAlign: 'center' }}>
             Explorá por Categoría
           </h2>
-          <p style={{ color: '#6B7280', fontSize: '15px', marginTop: '12px' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '15px', marginTop: '12px' }}>
             Encontrá el whisky perfecto para cada ocasión
           </p>
         </div>

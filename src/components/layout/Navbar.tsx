@@ -60,29 +60,6 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Social top bar */}
-      <div style={{ background: '#0F1117', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '6px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', gap: '14px' }}>
-          {socialLinks.map(({ href, label, Icon }) => (
-            <Link key={label} href={href} target="_blank" rel="noopener noreferrer"
-              style={{ color: 'rgba(255,255,255,0.35)', display: 'flex', transition: 'color 0.2s' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#C9A85C' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.35)' }}
-            >
-              <Icon />
-            </Link>
-          ))}
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <Link href="/cuenta" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', textDecoration: 'none', letterSpacing: '0.5px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%', display: 'inline-block' }} />
-            Mi cuenta
-          </Link>
-          <Link href="/contacto" style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', textDecoration: 'none', letterSpacing: '0.5px', textTransform: 'uppercase' }}>
-            Contacto
-          </Link>
-        </div>
-      </div>
 
       <nav className="navbar">
         {/* Search overlay */}
@@ -107,31 +84,48 @@ export default function Navbar() {
 
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
           {/* Top row: Logo + Icons */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={() => setMobileOpen(!mobileOpen)} style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}>
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
             <Link href="/" style={{ textDecoration: 'none', flex: 1, textAlign: 'center' }}>
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <span style={{ color: 'white', fontSize: '26px', fontWeight: '800', letterSpacing: '4px', textTransform: 'uppercase', lineHeight: 1 }}>
-                  WHISKY<span style={{ color: '#C9A85C' }}>BOOM</span>
-                </span>
-                <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '9px', letterSpacing: '3px', textTransform: 'uppercase', marginTop: '2px' }}>
-                  TIENDA DE WHISKY PREMIUM
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ color: 'var(--gold)', fontSize: '26px', fontWeight: '500', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                    WHISKY
+                  </span>
+                  <span style={{ 
+                    color: 'white', 
+                    fontSize: '26px', 
+                    fontWeight: '500', 
+                    letterSpacing: '1px', 
+                    textTransform: 'uppercase',
+                    border: '1.5px solid var(--maroon)',
+                    padding: '0 6px',
+                  }}>
+                    BOOM
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
+                  <div style={{ height: '1px', width: '30px', background: 'var(--gold)' }}></div>
+                  <span style={{ color: 'var(--gold)', fontSize: '10px', letterSpacing: '1px', fontWeight: '500' }}>
+                    BS.AS
+                  </span>
+                  <div style={{ height: '1px', width: '30px', background: 'var(--gold)' }}></div>
+                </div>
               </div>
             </Link>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <button onClick={() => setSearchOpen(true)} style={{ color: 'rgba(255,255,255,0.75)', background: 'none', border: 'none', cursor: 'pointer', padding: '8px', display: 'flex' }}>
+              <button onClick={() => setSearchOpen(true)} style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', padding: '8px', display: 'flex' }}>
                 <Search size={20} />
               </button>
-              <Link href="/cuenta" style={{ color: 'rgba(255,255,255,0.75)', padding: '8px', display: 'flex' }}>
+              <Link href="/cuenta" style={{ color: 'white', padding: '8px', display: 'flex' }}>
                 <User size={20} />
               </Link>
               {/* Cart with badge */}
-              <button onClick={openCart} style={{ color: 'rgba(255,255,255,0.75)', padding: '8px', display: 'flex', position: 'relative', background: 'none', border: 'none', cursor: 'pointer' }}>
+              <button onClick={openCart} style={{ color: 'white', padding: '8px', display: 'flex', position: 'relative', background: 'none', border: 'none', cursor: 'pointer' }}>
                 <ShoppingCart size={20} />
                 {itemCount > 0 && (
                   <span style={{ position: 'absolute', top: '2px', right: '2px', background: '#C9A85C', color: '#1a1a1a', fontSize: '10px', fontWeight: '800', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'cartBadgePop 0.3s ease' }}>

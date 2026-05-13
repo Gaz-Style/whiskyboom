@@ -143,24 +143,24 @@ function ProductsContent() {
 
   const checkStyle = (active: boolean) => ({
     width: '16px', height: '16px', borderRadius: '4px', flexShrink: 0,
-    border: `2px solid ${active ? '#8B1A1A' : '#D1D5DB'}`,
-    background: active ? '#8B1A1A' : 'white',
+    border: `2px solid ${active ? '#8B1A1A' : 'var(--gray-400)'}`,
+    background: active ? '#8B1A1A' : 'var(--bg-main)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
   })
 
   return (
-    <div style={{ minHeight: '100vh', background: 'white', fontFamily: 'var(--font-inter, system-ui)' }}>
+    <div style={{ minHeight: '100vh', background: 'transparent', fontFamily: 'var(--font-inter, system-ui)' }}>
       {/* Page header */}
-      <div style={{ background: '#F7F4EE', padding: '48px 24px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'var(--bg-main)', padding: '48px 24px', position: 'relative', overflow: 'hidden', borderBottom: '1px solid var(--gray-200)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', alignItems: 'center', gap: '24px' }}>
           <div>
-            <p style={{ margin: '0 0 8px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', color: '#8B1A1A' }}>
+            <p style={{ margin: '0 0 8px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '2px', color: '#C9A85C' }}>
               Catálogo
             </p>
-            <h1 style={{ margin: '0 0 12px', fontSize: '36px', fontWeight: '900', color: '#1a1a1a', lineHeight: 1.1 }}>
+            <h1 style={{ margin: '0 0 12px', fontSize: '36px', fontWeight: '900', color: 'var(--text-primary)', lineHeight: 1.1 }}>
               Todos los Whiskies
             </h1>
-            <p style={{ margin: 0, color: '#6B7280', fontSize: '14px' }}>
+            <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px' }}>
               La mejor selección de whisky premium de Argentina
             </p>
           </div>
@@ -171,15 +171,15 @@ function ProductsContent() {
       </div>
 
       {/* Discount toggle */}
-      <div style={{ background: '#F0EDE6', borderBottom: '1px solid #E5E2D9' }}>
+      <div style={{ background: 'var(--card-bg)', borderBottom: '1px solid var(--gray-200)' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
           <button
             onClick={() => setOnlySale(!onlySale)}
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
-              background: onlySale ? '#8B1A1A' : 'white',
-              color: onlySale ? 'white' : '#555',
-              border: '1px solid ' + (onlySale ? '#8B1A1A' : '#D1D5DB'),
+              background: onlySale ? '#8B1A1A' : 'var(--bg-main)',
+              color: onlySale ? 'white' : 'var(--text-secondary)',
+              border: '1px solid ' + (onlySale ? '#8B1A1A' : 'var(--gray-200)'),
               padding: '6px 16px', borderRadius: '20px', fontSize: '13px',
               fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s',
             }}
@@ -277,11 +277,11 @@ function ProductsContent() {
               <input
                 value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Buscar whisky, marca, región..."
-                style={{ width: '100%', padding: '10px 12px 10px 36px', boxSizing: 'border-box', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', outline: 'none', background: '#FAFAFA' }}
+                style={{ width: '100%', padding: '10px 12px 10px 36px', boxSizing: 'border-box', border: '1px solid var(--gray-200)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg-main)' }}
               />
               {search && <button onClick={() => setSearch('')} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', display: 'flex' }}><X size={14} /></button>}
             </div>
-            <select value={sort} onChange={e => setSort(e.target.value)} style={{ padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '13px', outline: 'none', background: 'white', cursor: 'pointer' }}>
+            <select value={sort} onChange={e => setSort(e.target.value)} style={{ padding: '10px 14px', border: '1px solid var(--gray-200)', borderRadius: '8px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none', background: 'var(--bg-main)', cursor: 'pointer' }}>
               {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
@@ -307,7 +307,7 @@ function ProductsContent() {
                 return (
                   <div
                     key={product.id}
-                    style={{ background: 'white', border: '1px solid #F0F0F0', borderRadius: '10px', overflow: 'hidden', position: 'relative', transition: 'all 0.2s', cursor: 'pointer' }}
+                    style={{ background: 'var(--card-bg)', border: '1px solid var(--gray-200)', borderRadius: '10px', overflow: 'hidden', position: 'relative', transition: 'all 0.2s', cursor: 'pointer' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 8px 30px rgba(0,0,0,0.1)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)' }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = 'none'; (e.currentTarget as HTMLElement).style.transform = 'none' }}
                   >
@@ -320,9 +320,9 @@ function ProductsContent() {
 
                     {/* Image */}
                     <Link href={`/productos/${product.slug}`} style={{ textDecoration: 'none' }}>
-                      <div style={{ background: '#F9F7F3', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '200px', position: 'relative' }}>
+                      <div style={{ background: 'var(--bg-main)', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '200px', position: 'relative' }}>
                         {!product.in_stock && (
-                          <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,0.6)', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <div style={{ position: 'absolute', inset: 0, background: 'rgba(18,22,29,0.6)', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <span style={{ background: '#6B7280', color: 'white', fontSize: '11px', fontWeight: '700', padding: '5px 12px', borderRadius: '2px', textTransform: 'uppercase' }}>Agotado</span>
                           </div>
                         )}
@@ -337,9 +337,9 @@ function ProductsContent() {
 
                       {/* Info */}
                       <div style={{ padding: '12px 14px 8px' }}>
-                        <p style={{ margin: '0 0 2px', fontSize: '10px', color: '#9CA3AF', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{product.brand}</p>
-                        <h3 style={{ margin: '0 0 4px', fontSize: '13px', fontWeight: '700', color: '#1a1a1a', lineHeight: 1.3 }}>{product.name}</h3>
-                        <p style={{ margin: '0 0 6px', fontSize: '11px', color: '#9CA3AF' }}>
+                        <p style={{ margin: '0 0 2px', fontSize: '10px', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{product.brand}</p>
+                        <h3 style={{ margin: '0 0 4px', fontSize: '13px', fontWeight: '700', color: 'var(--text-primary)', lineHeight: 1.3 }}>{product.name}</h3>
+                        <p style={{ margin: '0 0 6px', fontSize: '11px', color: 'var(--text-secondary)' }}>
                           {product.region}{product.age ? ` · ${product.age} años` : ''} · {product.abv}% vol.
                         </p>
                         <StarRating rating={product.rating} />

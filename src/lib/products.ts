@@ -44,12 +44,22 @@ export async function getProducts(filters?: {
 }
 
 export async function getFeaturedProducts(limit = 8): Promise<Product[]> {
-  const { data } = await db.from('products').select('*').eq('is_featured', true).eq('in_stock', true).order('created_at', { ascending: false }).limit(limit)
+  // Broaden to show featured OR on sale items if needed to fill the grid
+  const { data } = await db.from('products')
+    .select('*')
+    .order('is_featured', { ascending: false })
+    .order('original_price', { ascending: false, nullsFirst: false })
+    .limit(limit)
   return data ?? []
 }
 
 export async function getNewArrivals(limit = 8): Promise<Product[]> {
-  const { data } = await db.from('products').select('*').eq('badge', 'new').order('created_at', { ascending: false }).limit(limit)
+  // Show 'new' items first, then most recent items
+  const { data } = await db.from('products')
+    .select('*')
+    .order('badge', { ascending: false }) // 'new' comes before null
+    .order('created_at', { ascending: false })
+    .limit(limit)
   return data ?? []
 }
 

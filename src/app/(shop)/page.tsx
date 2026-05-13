@@ -10,10 +10,10 @@ export default function Home() {
     <>
       <HeroBanner />
       <TrustBadges />
-      <PromoBanners />
-      <ProductGrid title="Productos Destacados" variant="featured" />
-      <CategoryCards />
       <ProductGrid title="Nuevas Llegadas" variant="new" />
+      <PromoBanners />
+      <ProductGrid title="Ofertas Destacadas" variant="featured" />
+      <CategoryCards />
       <Newsletter />
     </>
   );

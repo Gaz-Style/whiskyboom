@@ -60,7 +60,7 @@ export default function CartDrawer() {
         style={{
           position: 'fixed', top: 0, right: 0, bottom: 0,
           width: '420px', maxWidth: '100vw',
-          background: '#FFFFFF',
+          background: 'var(--bg-main)',
           zIndex: 401,
           display: 'flex', flexDirection: 'column',
           transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
@@ -72,8 +72,8 @@ export default function CartDrawer() {
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '20px 24px',
-          borderBottom: '1px solid #F0F0F0',
-          background: '#1E2530',
+          borderBottom: '1px solid var(--gray-200)',
+          background: 'var(--card-bg)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <ShoppingBag size={20} color="#C9A85C" />
@@ -115,7 +115,7 @@ export default function CartDrawer() {
 
         {/* Shipping progress bar */}
         {items.length > 0 && (
-          <div style={{ padding: '12px 24px', background: '#F9F9F9', borderBottom: '1px solid #F0F0F0' }}>
+          <div style={{ padding: '12px 24px', background: 'var(--card-bg)', borderBottom: '1px solid var(--gray-200)' }}>
             {remaining > 0 ? (
               <p style={{ margin: '0 0 6px', fontSize: '12px', color: '#555' }}>
                 Te faltan <strong style={{ color: '#8B1A1A' }}>{formatPrice(remaining)}</strong> para envío gratis 🚚
@@ -140,8 +140,8 @@ export default function CartDrawer() {
           {items.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', padding: '40px', textAlign: 'center' }}>
               <ShoppingBag size={56} color="#E5E7EB" style={{ marginBottom: '16px' }} />
-              <p style={{ fontWeight: '700', fontSize: '16px', color: '#1a1a1a', margin: '0 0 8px' }}>Tu carrito está vacío</p>
-              <p style={{ color: '#9CA3AF', fontSize: '13px', margin: '0 0 24px' }}>Explorá nuestra selección de whiskies premium</p>
+              <p style={{ fontWeight: '700', fontSize: '16px', color: 'var(--text-primary)', margin: '0 0 8px' }}>Tu carrito está vacío</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: '0 0 24px' }}>Explorá nuestra selección de whiskies premium</p>
               <button
                 onClick={closeCart}
                 style={{
@@ -158,12 +158,12 @@ export default function CartDrawer() {
               {items.map(item => (
                 <div key={item.id} style={{
                   display: 'flex', gap: '14px', padding: '16px 24px',
-                  borderBottom: '1px solid #F0F0F0', alignItems: 'flex-start',
+                  borderBottom: '1px solid var(--gray-200)', alignItems: 'flex-start',
                 }}>
                   {/* Image */}
                   <div style={{
                     width: '70px', height: '90px', flexShrink: 0,
-                    background: '#F7F7F7', borderRadius: '6px', overflow: 'hidden',
+                    background: 'var(--card-bg)', borderRadius: '6px', overflow: 'hidden',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     {item.image ? (
@@ -177,7 +177,7 @@ export default function CartDrawer() {
                   <div style={{ flex: 1 }}>
                     <p style={{ margin: '0 0 2px', fontSize: '11px', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.brand}</p>
                     <Link href={`/productos/${item.slug}`} onClick={closeCart} style={{ textDecoration: 'none' }}>
-                      <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: '600', color: '#1a1a1a', lineHeight: 1.3 }}>{item.name}</p>
+                      <p style={{ margin: '0 0 10px', fontSize: '13px', fontWeight: '600', color: 'var(--text-primary)', lineHeight: 1.3 }}>{item.name}</p>
                     </Link>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       {/* Qty selector */}
@@ -193,7 +193,7 @@ export default function CartDrawer() {
                         </span>
                         <button
                           onClick={() => updateQty(item.id, item.quantity + 1)}
-                          style={{ padding: '4px 10px', background: 'none', border: 'none', cursor: 'pointer', color: '#555', display: 'flex', alignItems: 'center' }}
+                          style={{ padding: '4px 10px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center' }}
                         >
                           <Plus size={12} />
                         </button>
@@ -221,11 +221,11 @@ export default function CartDrawer() {
 
         {/* Footer */}
         {items.length > 0 && (
-          <div style={{ borderTop: '2px solid #F0F0F0', padding: '20px 24px', background: 'white' }}>
+          <div style={{ borderTop: '2px solid var(--gray-200)', padding: '20px 24px', background: 'var(--bg-main)' }}>
             {/* Subtotal */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-              <span style={{ color: '#555', fontSize: '14px' }}>Subtotal</span>
-              <span style={{ fontWeight: '700', fontSize: '16px', color: '#1a1a1a' }}>{formatPrice(subtotal)}</span>
+              <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Subtotal</span>
+              <span style={{ fontWeight: '700', fontSize: '16px', color: 'var(--text-primary)' }}>{formatPrice(subtotal)}</span>
             </div>
             <p style={{ margin: '0 0 16px', color: '#9CA3AF', fontSize: '11px' }}>
               Envío calculado al finalizar la compra

@@ -38,7 +38,7 @@ const badges = [
 
 export default function TrustBadges() {
   return (
-    <section style={{ padding: '60px 0', background: 'white', borderTop: '1px solid #F0F0F0' }}>
+    <section style={{ padding: '60px 0', background: 'transparent', borderTop: '1px solid var(--gray-200)' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         <div style={{
           display: 'grid',
@@ -54,11 +54,11 @@ export default function TrustBadges() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.07 }}
             >
-              <div style={{ color: '#8B1A1A', marginBottom: '12px' }}>{badge.icon}</div>
-              <h4 style={{ fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', color: '#1A1A1A' }}>
+              <div style={{ color: 'var(--gold)', marginBottom: '12px' }}>{badge.icon}</div>
+              <h4 style={{ fontSize: '13px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', color: 'var(--text-primary)' }}>
                 {badge.title}
               </h4>
-              <p style={{ fontSize: '12px', color: '#6B7280', lineHeight: '1.5' }}>{badge.desc}</p>
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: '1.5' }}>{badge.desc}</p>
             </motion.div>
           ))}
         </div>
