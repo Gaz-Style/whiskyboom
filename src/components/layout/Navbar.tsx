@@ -85,7 +85,7 @@ export default function Navbar() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
           {/* Top row: Logo + Icons */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <button onClick={() => setMobileOpen(!mobileOpen)} style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer', display: 'flex' }}>
+            <button onClick={() => setMobileOpen(!mobileOpen)} className="md:hidden flex items-center" style={{ color: 'white', background: 'none', border: 'none', cursor: 'pointer' }}>
               {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
@@ -137,7 +137,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop nav links */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="hidden md:flex" style={{ justifyContent: 'center' }}>
             {navLinks.map((link) => (
               <div key={link.label} style={{ position: 'relative' }}
                 onMouseEnter={() => link.submenu && setActiveDropdown(link.label)}
