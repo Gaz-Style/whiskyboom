@@ -75,6 +75,26 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
+const CATEGORY_MAP: Record<string, string> = {
+  'single-malt': 'Single Malt Escocés',
+  'single-malt-escoces': 'Single Malt Escocés',
+  'blended': 'Blended Escocés',
+  'blended-escoces': 'Blended Escocés',
+  'bourbon': 'Bourbon & Tennessee',
+  'bourbon-tennessee': 'Bourbon & Tennessee',
+  'japones': 'Whisky Japonés',
+  'blended-malt': 'Blended Malt',
+  'irlandes': 'Irish Whiskey',
+  'irish': 'Irish Whiskey'
+}
+
+const BRAND_MAP: Record<string, string> = {
+  'macallan': 'The Macallan',
+  'glenfiddich': 'Glenfiddich',
+  'laphroaig': 'Laphroaig',
+  'johnnie-walker': 'Johnnie Walker'
+}
+
 function ProductsContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -89,10 +109,31 @@ function ProductsContent() {
   // Active filters
   const [stock,    setStock]    = useState<'all'|'in'|'out'>(searchParams.get('stock') as 'all' | 'in' | 'out' ?? 'all')
   const [badge,    setBadge]    = useState(searchParams.get('badge') ?? '')
-  const [cats,     setCats]     = useState<string[]>(searchParams.get('categoria') ? [searchParams.get('categoria')!] : [])
+  const [cats,     setCats]     = useState<string[]>(() => {
+    const cat = searchParams.get('categoria')
+    return cat ? [CATEGORY_MAP[cat] || cat] : []
+  })
+  const [brands,   setBrands]   = useState<string[]>(() => {
+    const brand = searchParams.get('marca')
+    return brand ? [BRAND_MAP[brand] || brand] : []
+  })
   const [regions,  setRegions]  = useState<string[]>([])
   const [priceIdx, setPriceIdx] = useState<number | null>(null)
   const [onlySale, setOnlySale] = useState(searchParams.get('sale') === 'true')
+
+  // Sync URL searchParams to local state when navigating via Navbar
+  useEffect(() => {
+    const cat = searchParams.get('categoria')
+    setCats(cat ? [CATEGORY_MAP[cat] || cat] : [])
+
+    const brand = searchParams.get('marca')
+    setBrands(brand ? [BRAND_MAP[brand] || brand] : [])
+
+    setStock(searchParams.get('stock') as 'all' | 'in' | 'out' ?? 'all')
+    setBadge(searchParams.get('badge') ?? '')
+    setOnlySale(searchParams.get('sale') === 'true')
+    setSearch(searchParams.get('q') ?? '')
+  }, [searchParams])
 
   const toggleArray = (arr: string[], val: string) =>
     arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val]
@@ -106,6 +147,7 @@ function ProductsContent() {
     if (badge)           q = q.eq('badge', badge)
     if (onlySale)        q = q.eq('badge', 'sale')
     if (cats.length)     q = q.in('category', cats)
+    if (brands.length)   q = q.in('brand', brands)
     if (regions.length)  q = q.in('region', regions)
     if (priceIdx !== null) {
       const r = PRICE_RANGES[priceIdx]
@@ -132,12 +174,12 @@ function ProductsContent() {
 
     setProducts(results)
     setLoading(false)
-  }, [stock, badge, cats, regions, priceIdx, sort, onlySale, search])
+  }, [stock, badge, cats, brands, regions, priceIdx, sort, onlySale, search])
 
   useEffect(() => { load() }, [load])
 
   const activeFiltersCount = [
-    stock !== 'all', badge !== '', cats.length > 0,
+    stock !== 'all', badge !== '', cats.length > 0, brands.length > 0,
     regions.length > 0, priceIdx !== null, onlySale
   ].filter(Boolean).length
 
@@ -199,7 +241,7 @@ function ProductsContent() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <h2 style={{ margin: 0, fontSize: '14px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Filtros</h2>
             {activeFiltersCount > 0 && (
-              <button onClick={() => { setStock('all'); setBadge(''); setCats([]); setRegions([]); setPriceIdx(null); setOnlySale(false) }}
+              <button onClick={() => { setStock('all'); setBadge(''); setCats([]); setBrands([]); setRegions([]); setPriceIdx(null); setOnlySale(false) }}
                 style={{ fontSize: '11px', color: '#8B1A1A', background: 'none', border: 'none', cursor: 'pointer', fontWeight: '700', textDecoration: 'underline' }}>
                 Limpiar ({activeFiltersCount})
               </button>

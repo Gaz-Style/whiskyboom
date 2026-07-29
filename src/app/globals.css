@@ -120,6 +120,7 @@ body {
   justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
+  padding: 16px 24px;
 }
 
 .product-card__badge {
