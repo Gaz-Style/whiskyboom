@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Star, ShoppingCart } from 'lucide-react';
 import { getFeaturedProducts, getNewArrivals, formatPrice, type Product } from '@/lib/products';
 
@@ -20,8 +21,8 @@ function StarRating({ rating }: { rating: number }) {
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   return (
-    <div className="product-card" style={{ animationDelay: `${index * 50}ms` }}>
-      <Link href={`/productos/${product.slug}`} style={{ textDecoration: 'none' }}>
+    <div className="product-card" style={{ animationDelay: `${index * 50}ms`, display: 'flex', flexDirection: 'column' }}>
+      <Link href={`/productos/${product.slug}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', flex: 1 }}>
         <div className="product-card__image-wrap">
           {product.badge && (
             <span className={`product-card__badge product-card__badge--${product.badge}`}>
@@ -35,7 +36,13 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
           )}
           {/* Product image or placeholder */}
           {product.image ? (
-            <img src={product.image} alt={product.name} style={{ width: '80px', height: '180px', objectFit: 'contain' }} />
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 220px"
+              style={{ objectFit: 'contain', padding: '8px' }}
+            />
           ) : (
             <div style={{ width: '80px', height: '180px', background: 'linear-gradient(180deg, #C9A85C 0%, #8B6914 50%, #5A4009 100%)', borderRadius: '6px 6px 4px 4px', position: 'relative', boxShadow: '4px 4px 20px rgba(0,0,0,0.2)' }}>
               <div style={{ position: 'absolute', top: '-20px', left: '50%', transform: 'translateX(-50%)', width: '20px', height: '24px', background: '#4A4A4A', borderRadius: '3px 3px 0 0' }} />
