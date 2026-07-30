@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import toast, { Toaster } from 'react-hot-toast'
-import { Plus, Save, Trash2, Eye, EyeOff, ToggleLeft, ToggleRight } from 'lucide-react'
+import { Plus, Save, Trash2, Eye, EyeOff, ToggleLeft, ToggleRight, Upload, Loader2 } from 'lucide-react'
 
 interface Banner {
   id: string
@@ -21,6 +21,7 @@ export default function AdminBannersPage() {
   const [banners, setBanners] = useState<Banner[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState<string | null>(null)
+  const [uploadingId, setUploadingId] = useState<string | null>(null)
 
   const load = async () => {
     setLoading(true)
@@ -54,6 +55,44 @@ export default function AdminBannersPage() {
     if (!error) { toast.success('Banner creado — editá los campos'); load() }
   }
 
+  const handleImageUpload = async (id: string, file: File) => {
+    setUploadingId(id)
+    try {
+      const ext = file.name.split('.').pop()
+      const path = `banners/${Date.now()}.${ext}`
+      
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(path, file, { upsert: true })
+
+      if (uploadError) {
+        toast.error('Error al subir la imagen: ' + uploadError.message)
+        return
+      }
+
+      const { data } = supabase.storage.from('product-images').getPublicUrl(path)
+      
+      // Update DB
+      const { error: dbError } = await supabase
+        .from('banners')
+        .update({ image_url: data.publicUrl })
+        .eq('id', id)
+
+      if (dbError) {
+        toast.error('Error al actualizar base de datos: ' + dbError.message)
+      } else {
+        toast.success('Imagen de banner actualizada')
+        setBanners(prev =>
+          prev.map(b => (b.id === id ? { ...b, image_url: data.publicUrl } : b))
+        )
+      }
+    } catch (e: any) {
+      toast.error('Ocurrió un error inesperado')
+    } finally {
+      setUploadingId(null)
+    }
+  }
+
   const fieldStyle = {
     width: '100%', padding: '8px 12px', boxSizing: 'border-box' as const,
     background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
@@ -82,29 +121,62 @@ export default function AdminBannersPage() {
               background: 'rgba(255,255,255,0.04)', border: `1px solid ${banner.is_active ? 'rgba(201,168,92,0.25)' : 'rgba(255,255,255,0.07)'}`,
               borderRadius: '12px', overflow: 'hidden',
             }}>
-              {/* Preview strip */}
-              <div style={{
-                height: '80px', padding: '16px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-                background: banner.dark
-                  ? 'linear-gradient(135deg, #1E2530 0%, #2A3140 100%)'
-                  : 'linear-gradient(135deg, #8B1A1A 0%, #2A3140 100%)',
-                position: 'relative', overflow: 'hidden',
-              }}>
+              {/* Preview strip / Upload zone */}
+              <div 
+                onClick={() => document.getElementById(`file-${banner.id}`)?.click()}
+                style={{
+                  height: '120px', padding: '16px 24px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+                  background: banner.dark
+                    ? 'linear-gradient(135deg, #1E2530 0%, #2A3140 100%)'
+                    : 'linear-gradient(135deg, #8B1A1A 0%, #2A3140 100%)',
+                  position: 'relative', overflow: 'hidden', cursor: 'pointer'
+                }}
+                className="banner-preview-strip"
+              >
+                <input
+                  type="file"
+                  id={`file-${banner.id}`}
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  onChange={e => {
+                    const file = e.target.files?.[0]
+                    if (file) handleImageUpload(banner.id, file)
+                  }}
+                />
+
                 {banner.image_url && (
-                  <img src={banner.image_url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
+                  <img src={banner.image_url} alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} />
                 )}
+
+                {/* Hover upload overlay */}
+                <div className="upload-overlay" style={{
+                  position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                  opacity: uploadingId === banner.id ? 1 : 0,
+                  transition: 'opacity 0.2s', zIndex: 2
+                }}>
+                  {uploadingId === banner.id ? (
+                    <Loader2 size={24} style={{ color: '#C9A85C', animation: 'spin 1s linear infinite' }} />
+                  ) : (
+                    <>
+                      <Upload size={24} style={{ color: '#C9A85C', marginBottom: '4px' }} />
+                      <span style={{ fontSize: '11px', fontWeight: 'bold', color: 'white' }}>HACÉ CLICK PARA CAMBIAR LA IMAGEN</span>
+                    </>
+                  )}
+                </div>
+
                 <div style={{ position: 'relative', zIndex: 1 }}>
-                  <div style={{ color: 'white', fontWeight: '800', fontSize: '14px', textTransform: 'uppercase' }}>{banner.title}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px' }}>{banner.subtitle}</div>
+                  <div style={{ color: 'white', fontWeight: '800', fontSize: '16px', textTransform: 'uppercase', textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>{banner.title}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '12px', textShadow: '1px 1px 4px rgba(0,0,0,0.8)' }}>{banner.subtitle}</div>
                 </div>
                 <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ background: '#C9A85C', color: '#1a1a1a', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '2px' }}>
+                  <span style={{ background: '#C9A85C', color: '#1a1a1a', fontSize: '10px', fontWeight: '700', padding: '4px 10px', borderRadius: '2px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
                     {banner.cta_text} →
                   </span>
                   <span style={{
                     padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: '700',
-                    background: banner.is_active ? 'rgba(16,185,129,0.2)' : 'rgba(239,68,68,0.2)',
-                    color: banner.is_active ? '#10B981' : '#EF4444',
+                    background: banner.is_active ? 'rgba(16,185,129,0.9)' : 'rgba(239,68,68,0.9)',
+                    color: 'white', boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
                   }}>
                     {banner.is_active ? 'ACTIVO' : 'INACTIVO'}
                   </span>
@@ -148,10 +220,10 @@ export default function AdminBannersPage() {
                 <div>
                   <label style={{ display: 'block', fontSize: '10px', color: 'rgba(255,255,255,0.4)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>URL IMAGEN</label>
                   <input
-                    defaultValue={banner.image_url ?? ''}
-                    onBlur={e => update(banner.id, { image_url: e.target.value || null })}
-                    placeholder="/promo-banner.jpg"
-                    style={fieldStyle}
+                    value={banner.image_url ?? ''}
+                    readOnly
+                    placeholder="Ninguna imagen subida"
+                    style={{ ...fieldStyle, opacity: 0.7, cursor: 'not-allowed' }}
                   />
                 </div>
 
@@ -182,6 +254,13 @@ export default function AdminBannersPage() {
           ))}
         </div>
       )}
+
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .banner-preview-strip:hover .upload-overlay {
+          opacity: 1 !important;
+        }
+      `}</style>
     </div>
   )
 }
