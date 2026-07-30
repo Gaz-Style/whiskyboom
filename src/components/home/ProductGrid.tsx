@@ -42,7 +42,7 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
               width={100}
               height={175}
               sizes="220px"
-              style={{ objectFit: 'contain', width: 'auto', height: '175px', maxWidth: '85%' }}
+              style={{ objectFit: 'contain', width: 'auto', height: 'auto', maxHeight: '175px', maxWidth: '85%' }}
             />
           ) : (
             <div style={{ width: '80px', height: '180px', background: 'linear-gradient(180deg, #C9A85C 0%, #8B6914 50%, #5A4009 100%)', borderRadius: '6px 6px 4px 4px', position: 'relative', boxShadow: '4px 4px 20px rgba(0,0,0,0.2)' }}>
