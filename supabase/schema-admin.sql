@@ -141,7 +141,9 @@ CREATE POLICY "newsletter_admin_update" ON newsletter_subscribers FOR UPDATE USI
 -- ============================================================
 -- VISTA: admin_product_stats (útil para el dashboard)
 -- ============================================================
-CREATE OR REPLACE VIEW admin_product_stats AS
+DROP VIEW IF EXISTS admin_product_stats;
+CREATE OR REPLACE VIEW admin_product_stats 
+WITH (security_invoker = true) AS
 SELECT
   COUNT(*)                                          AS total_products,
   COUNT(*) FILTER (WHERE in_stock = false)          AS out_of_stock,

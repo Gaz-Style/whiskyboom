@@ -1,16 +1,17 @@
 'use client';
 
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { supabase } from '@/lib/supabase';
 
-const banners = [
+const defaultBanners = [
   {
     id: 'ofertas',
     title: 'Grandes Ofertas',
     subtitle: 'Hasta 30% OFF en selección especial',
     cta: 'Ver Ofertas',
-    href: '/ofertas',
+    href: '/productos?badge=sale',
     image: '/promo-ofertas.jpg',
     dark: true,
   },
@@ -28,13 +29,61 @@ const banners = [
     title: 'Ediciones Limitadas',
     subtitle: 'Botellas únicas para coleccionistas',
     cta: 'Ver Colección',
-    href: '/productos?categoria=limitado',
+    href: '/productos',
     image: '/cat-blended.jpg',
     dark: true,
   },
 ];
 
+interface BannerItem {
+  id: string
+  title: string
+  subtitle: string
+  cta: string
+  href: string
+  image: string
+  dark: boolean
+}
+
 export default function PromoBanners() {
+  const [banners, setBanners] = useState<BannerItem[]>(defaultBanners)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const { data } = await supabase
+          .from('banners')
+          .select('*')
+          .eq('is_active', true)
+          .neq('id', '00000000-0000-0000-0000-000000000000')
+          .order('sort_order', { ascending: true })
+
+        if (data && data.length > 0) {
+          const mapped = data.map(b => ({
+            id: b.id,
+            title: b.title,
+            subtitle: b.subtitle,
+            cta: b.cta_text,
+            href: b.href,
+            image: b.image_url || '/promo-ofertas.jpg',
+            dark: b.dark
+          }))
+          setBanners(mapped)
+        } else {
+          setBanners(defaultBanners)
+        }
+      } catch (e) {
+        console.error('Error loading banners:', e)
+        setBanners(defaultBanners)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBanners()
+  }, [])
+
   return (
     <section style={{ padding: '48px 0', background: '#F7F7F7' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
@@ -52,12 +101,11 @@ export default function PromoBanners() {
               transition={{ delay: i * 0.1, duration: 0.5 }}
             >
               <Link href={banner.href} style={{ textDecoration: 'none', display: 'block' }}>
-                <div className="promo-banner" style={{ height: '200px', borderRadius: '4px' }}>
-                  <Image
+                <div className="promo-banner" style={{ height: '200px', borderRadius: '4px', position: 'relative', overflow: 'hidden' }}>
+                  <img
                     src={banner.image}
                     alt={banner.title}
-                    fill
-                    style={{ objectFit: 'cover' }}
+                    style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div style={{
                     position: 'absolute',

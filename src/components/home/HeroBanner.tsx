@@ -1,25 +1,76 @@
 'use client';
 
-import Image from 'next/image';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, ChevronRight } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+
+interface HeroData {
+  title: string
+  subtitle: string
+  cta_text: string
+  href: string
+  image_url: string
+  is_active: boolean
+}
 
 export default function HeroBanner() {
+  const [hero, setHero] = useState<HeroData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('banners')
+          .select('*')
+          .eq('id', '00000000-0000-0000-0000-000000000000')
+          .single();
+
+        if (!error && data) {
+          setHero({
+            title: data.title,
+            subtitle: data.subtitle,
+            cta_text: data.cta_text,
+            href: data.href,
+            image_url: data.image_url || '/hero.jpg',
+            is_active: data.is_active
+          });
+        }
+      } catch (e) {
+        console.error('Error fetching hero banner:', e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHero();
+  }, []);
+
+  // Fallback default structure if DB is still loading or doesn't exist yet
+  const displayTitle = hero ? hero.title : 'Los Mejores Whiskies del Mundo';
+  const displaySubtitle = hero ? hero.subtitle : 'Más de 200 referencias premium. Single malts escoceses, bourbons americanos, japoneses y ediciones limitadas.';
+  const displayCta = hero ? hero.cta_text : 'Explorar Whiskies';
+  const displayHref = hero ? hero.href : '/productos';
+  const displayImage = hero ? hero.image_url : '/hero.jpg';
+  const isActive = hero ? hero.is_active : true;
+
+  if (!isActive && !loading) {
+    return null; // Hide completely if turned off from administration panel
+  }
+
   return (
-    <section className="hero" style={{ minHeight: '620px' }}>
+    <section className="hero" style={{ minHeight: '620px', position: 'relative', overflow: 'hidden' }}>
       {/* Background image */}
-      <Image
-        src="/hero.jpg"
+      <img
+        src={displayImage}
         alt="Whiskyboom — Tienda de Whisky Premium"
-        fill
-        style={{ objectFit: 'cover', objectPosition: 'center' }}
-        priority
-        quality={90}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
       />
 
       {/* Overlay gradient */}
-      <div className="hero__overlay" />
+      <div className="hero__overlay" style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1 }} />
 
       {/* Content */}
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '80px 24px', width: '100%', position: 'relative', zIndex: 2 }}>
@@ -63,9 +114,7 @@ export default function HeroBanner() {
               textTransform: 'uppercase',
             }}
           >
-            Los Mejores<br />
-            <span style={{ color: '#C9A85C' }}>Whiskies</span><br />
-            del Mundo
+            {displayTitle}
           </motion.h1>
 
           <motion.p
@@ -80,7 +129,7 @@ export default function HeroBanner() {
               maxWidth: '440px',
             }}
           >
-            Más de 200 referencias premium. Single malts escoceses, bourbons americanos, japoneses y ediciones limitadas.
+            {displaySubtitle}
           </motion.p>
 
           <motion.div
@@ -89,10 +138,10 @@ export default function HeroBanner() {
             transition={{ delay: 0.6 }}
             style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}
           >
-            <Link href="/productos" className="btn-primary">
-              Explorar Whiskies <ArrowRight size={16} />
+            <Link href={displayHref} className="btn-primary">
+              {displayCta} <ArrowRight size={16} />
             </Link>
-            <Link href="/ofertas" className="btn-outline-white">
+            <Link href="/productos?badge=sale" className="btn-outline-white">
               Ver Ofertas
             </Link>
           </motion.div>

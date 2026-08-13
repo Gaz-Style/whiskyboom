@@ -20,6 +20,7 @@ import {
   Glasses,
   Star,
   Truck,
+  FileText,
 } from 'lucide-react'
 
 const navItems = [
@@ -31,6 +32,7 @@ const navItems = [
   { href: '/admin/resenas',      label: 'Reseñas',       icon: Star },
   { href: '/admin/envios',       label: 'Envíos',        icon: Truck },
   { href: '/admin/newsletter',   label: 'Newsletter',    icon: Mail },
+  { href: '/admin/paginas',      label: 'Páginas',       icon: FileText },
   { href: '/admin/configuracion',label: 'Configuración', icon: Settings },
 ]
 

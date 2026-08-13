@@ -17,7 +17,9 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS distillery        TEXT;           
 ALTER TABLE products ADD COLUMN IF NOT EXISTS gallery_images    TEXT[] DEFAULT '{}';       -- URLs adicionales de imágenes
 
 -- Vista actualizada de stats de admin (reemplaza la anterior)
-CREATE OR REPLACE VIEW admin_product_stats AS
+DROP VIEW IF EXISTS admin_product_stats;
+CREATE OR REPLACE VIEW admin_product_stats 
+WITH (security_invoker = true) AS
 SELECT
   COUNT(*)                                                        AS total_products,
   COUNT(*) FILTER (WHERE in_stock = false)                        AS out_of_stock,

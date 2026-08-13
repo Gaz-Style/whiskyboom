@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Search, ShoppingCart, User, Menu, X, ChevronDown } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { supabase } from '@/lib/supabase';
 
-// SVG social icons (Instagram/Facebook/Twitter not in this lucide-react version)
+// SVG social icons
 const IgIcon  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
 const FbIcon  = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
 const XIcon   = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -16,7 +17,7 @@ const socialLinks = [
   { href: 'https://twitter.com/whiskyboom',    label: 'X',  Icon: XIcon  },
 ]
 
-const navLinks = [
+const baseNavLinks = [
   {
     label: 'Whiskies',
     href: '/productos',
@@ -42,15 +43,47 @@ const navLinks = [
   },
   { label: 'Ofertas',   href: '/productos?badge=sale' },
   { label: 'Novedades', href: '/productos?badge=new'  },
-  { label: 'Blog',      href: '/blog'      },
-  { label: 'Nosotros',  href: '/nosotros'  },
 ]
+
+interface NavLinkItem {
+  label: string
+  href: string
+  submenu?: Array<{ label: string; href: string }>
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen]     = useState(false)
   const [searchOpen, setSearchOpen]     = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const { itemCount, openCart } = useCart()
+
+  const [navLinks, setNavLinks] = useState<NavLinkItem[]>(baseNavLinks)
+
+  useEffect(() => {
+    const fetchNavigation = async () => {
+      try {
+        // 1. Fetch active custom pages
+        const { data: pagesData } = await supabase
+          .from('custom_pages')
+          .select('title, slug')
+          .eq('is_active', true)
+          .order('created_at', { ascending: true }) // Order by creation to keep a logical order
+
+        // 2. Rebuild nav links
+        const links: NavLinkItem[] = [...baseNavLinks]
+        if (pagesData) {
+          pagesData.forEach(page => {
+            links.push({ label: page.title, href: `/${page.slug}` })
+          })
+        }
+        setNavLinks(links)
+      } catch (e) {
+        console.error('Error fetching navigation:', e)
+      }
+    }
+
+    fetchNavigation()
+  }, [])
 
   const hoverLink = (e: React.MouseEvent<HTMLAnchorElement>, enter: boolean) => {
     const el = e.currentTarget as HTMLElement
@@ -60,7 +93,6 @@ export default function Navbar() {
 
   return (
     <>
-
       <nav className="navbar">
         {/* Search overlay */}
         {searchOpen && (

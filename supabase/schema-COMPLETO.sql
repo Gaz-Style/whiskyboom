@@ -121,7 +121,9 @@ CREATE POLICY "products_admin_write" ON products FOR ALL USING (auth.role() = 'a
 -- ================================================================
 -- PASO 6: VISTA ADMIN STATS
 -- ================================================================
-CREATE OR REPLACE VIEW admin_product_stats AS
+DROP VIEW IF EXISTS admin_product_stats;
+CREATE OR REPLACE VIEW admin_product_stats 
+WITH (security_invoker = true) AS
 SELECT
   COUNT(*)                                                              AS total_products,
   COUNT(*) FILTER (WHERE in_stock = false)                              AS out_of_stock,
